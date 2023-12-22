@@ -16,7 +16,13 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::match(array('GET', 'POST'),'login-store', [AuthenticatedSessionController::class, 'store'])
+                ->middleware('login.link')
+                ->name('login.store');
+
+    Route::get('login-link', function () {
+        return view('auth.login-link');
+    });
 });
 
 Route::middleware('auth')->group(function () {
